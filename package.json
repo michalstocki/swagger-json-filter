@@ -1,0 +1,34 @@
+{
+  "name": "swagger-json-filter",
+  "version": "0.0.1",
+  "description": "Node.js command-line tool for filtering swagger documentation (swagger.json)",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "json-diff": "^0.3.1"
+  },
+  "scripts": {
+    "test": "test/run-tests.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michalstocki/swagger-json-filter.git"
+  },
+  "keywords": [
+    "swagger",
+    "documentation",
+    "filter",
+    "cmd",
+    "command-line"
+  ],
+  "author": "Michał Stocki (Young Digital Planet)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/michalstocki/swagger-json-filter/issues"
+  },
+  "homepage": "https://github.com/michalstocki/swagger-json-filter#readme"
+}
