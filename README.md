@@ -1,5 +1,7 @@
 # swagger-json-filter
 
+[![Build Status](https://travis-ci.org/michalstocki/swagger-json-filter.svg?branch=master)](https://travis-ci.org/michalstocki/swagger-json-filter)
+
 Command-line tool for filtering documentation created with Swagger.
 
 The filter matches all paths defined in the input JSON against the given regular expression. Definition of all paths that don't match given regex, are removed. In the second step tool filters all data structure definitions and removes all that are not used within the remaining part of the paths.
