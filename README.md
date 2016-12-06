@@ -16,3 +16,6 @@ then you can provide contents of the JSON file to the stdin:
 cat swagger.json | swagger-json-filter --include-paths="\/api\/.*" > filtered-swagger.json
 ```
 
+## Acknowledgements ##
+
+Great thanks for [Young Digital Planet](http://www.ydp.eu/) for supporting creation of this tool.
