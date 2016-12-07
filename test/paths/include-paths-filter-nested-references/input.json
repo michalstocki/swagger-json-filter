@@ -261,6 +261,12 @@
         "image": {
           "type": "string",
           "description": "Image URL representing the product."
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Activities"
+          }
         }
       }
     },
