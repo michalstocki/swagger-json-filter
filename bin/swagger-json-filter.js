@@ -14,18 +14,18 @@ stdin.on('end', function () {
 });
 
 function main(inputJson) {
-    const filterKey = 'paths';
-    const pathRegex = createPathRegex(getProgram().includePaths);
-
+    const pathRegex = new RegExp(getProgram().includePaths);
     inputJson = JSON.parse(inputJson);
+    const paths = inputJson.paths;
+
     let localizationOfReferences = {};
-    for (const element in inputJson[filterKey]) {
-        searchReferencesFor(inputJson[filterKey][element], inputJson, localizationOfReferences);
+    for (const path in paths) {
+        searchReferencesFor(paths[path], inputJson, localizationOfReferences);
     }
-    removeUnnecessaryElements(inputJson, filterKey, pathRegex);
+    removeUnwantedKeys(paths, pathRegex);
     let whiteList = {};
-    for (const element in inputJson[filterKey]) {
-        searchReferencesFor(inputJson[filterKey][element], inputJson, whiteList);
+    for (const element in paths) {
+        searchReferencesFor(paths[element], inputJson, whiteList);
     }
 
     clearMismatchedElements(inputJson, localizationOfReferences, whiteList);
@@ -39,14 +39,10 @@ function getProgram() {
     return program;
 }
 
-function createPathRegex(str) {
-    return new RegExp(str);
-}
-
-function removeUnnecessaryElements(inputJson, filterKey, regexObj) {
-    for (const key in inputJson[filterKey]) {
-        if (!regexObj.test(key)) {
-            delete inputJson[filterKey][key];
+function removeUnwantedKeys(objectToFilter, keyRegex) {
+    for (const key in objectToFilter) {
+        if (!keyRegex.test(key)) {
+            delete objectToFilter[key];
         }
     }
 }
