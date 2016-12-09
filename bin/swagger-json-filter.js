@@ -18,17 +18,17 @@ function main(inputJson) {
     inputJson = JSON.parse(inputJson);
     const paths = inputJson.paths;
 
-    let localizationOfReferences = {};
+    let definitionsMap = {};
     for (const path in paths) {
-        searchReferencesFor(paths[path], inputJson, localizationOfReferences);
+        searchReferencesFor(paths[path], inputJson, definitionsMap);
     }
     removeUnwantedKeys(paths, pathRegex);
     let whiteList = {};
-    for (const element in paths) {
-        searchReferencesFor(paths[element], inputJson, whiteList);
+    for (const path in paths) {
+        searchReferencesFor(paths[path], inputJson, whiteList);
     }
 
-    clearMismatchedElements(inputJson, localizationOfReferences, whiteList);
+    clearMismatchedElements(inputJson, definitionsMap, whiteList);
     filterJson(inputJson, whiteList);
 }
 
@@ -51,46 +51,47 @@ function isObject(value) {
     return (typeof value === 'object');
 }
 
-function modifyLocalizationOfReferences(majorKey, furtherKey, localizationOfReferences) {
-    if (!localizationOfReferences.hasOwnProperty(majorKey)) {
-        localizationOfReferences[majorKey] = [];
-        localizationOfReferences[majorKey].push(furtherKey);
-        return true;
-    } else if (localizationOfReferences[majorKey].indexOf(furtherKey) < 0) {
-        localizationOfReferences[majorKey].push(furtherKey);
-        return true;
-    }
-    return false;
+function saveReference(defLocalizationName, defName, definitionsMap) {
+    definitionsMap[defLocalizationName] = definitionsMap[defLocalizationName] || [];
+    definitionsMap[defLocalizationName].push(defName);
 }
 
-function searchReferencesFor(element, inputJson, localizationOfReferences) {
+function shouldSaveReference(defLocalizationName, defName, definitionsMap) {
+    return !definitionsMap[defLocalizationName] || definitionsMap[defLocalizationName].indexOf(defName) < 0;
+}
+
+function searchReferencesFor(element, inputJson, definitionsMap) {
     const flattenElement = flatten(element);
     for (const key in flattenElement) {
         let value = flattenElement[key];
         if (key.includes('$ref')) {
-            const [majorKey, furtherKey] = value.slice(2).split('/');
-            const next = inputJson[majorKey][furtherKey];
-            if (modifyLocalizationOfReferences(majorKey, furtherKey, localizationOfReferences) && isObject(next)) {
-                searchReferencesFor(next, inputJson, localizationOfReferences);
+            const [defLocalizationName, defName] = value.slice(2).split('/');
+            const next = inputJson[defLocalizationName][defName];
+            if (shouldSaveReference(defLocalizationName, defName, definitionsMap)) {
+                saveReference(defLocalizationName, defName, definitionsMap);
+                if (isObject(next)) {
+                    searchReferencesFor(next, inputJson, definitionsMap);
+
+                }
             }
         }
     }
 }
 
 function clearMismatchedElements(obj, someList, whiteList) {
-    for (let key in someList) {
+    for (const key in someList) {
         if (!whiteList.hasOwnProperty(key)) {
             obj[key] = {};
         }
     }
 }
 
-function filterJson(inputJson, localizationOfReferences) {
-    for (const majorKey in localizationOfReferences) {
-        let whiteKeys = localizationOfReferences[majorKey];
-        for (const key in inputJson[majorKey]) {
-            if (whiteKeys.indexOf(key) < 0) {
-                delete inputJson[majorKey][key];
+function filterJson(inputJson, definitionsMap) {
+    for (const defLocalizationName in definitionsMap) {
+        let expectedDefNames = definitionsMap[defLocalizationName];
+        for (const key in inputJson[defLocalizationName]) {
+            if (expectedDefNames.indexOf(key) < 0) {
+                delete inputJson[defLocalizationName][key];
             }
         }
     }
