@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 PATH=$(npm bin):$PATH
 
+chmod a+x $(npm prefix)/bin/swagger-json-filter
+PATH=$(npm prefix)/bin:$PATH
+
 export DIR=$(pwd)
 totalTestCount=0
 failedTestCount=0
