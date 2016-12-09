@@ -1,10 +1,5 @@
 #!/usr/bin/env node
-const program = require('commander');
 const flatten = require('flat');
-
-program
-    .option('-i, --include-paths <include-paths>', 'Get only this paths')
-    .parse(process.argv);
 
 let stdin = process.openStdin();
 
@@ -19,30 +14,41 @@ stdin.on('end', function () {
 });
 
 function main(inputJson) {
-    const includePath = 'paths';
-    const pathRegex = new RegExp(program.includePaths);
+    const filterKey = 'paths';
+    const pathRegex = createPathRegex(getProgram().includePaths);
+
     inputJson = JSON.parse(inputJson);
     let localizationOfReferences = {};
-    for (const element in inputJson[includePath]) {
-        searchReferencesFor(inputJson[includePath][element], inputJson, localizationOfReferences);
+    for (const element in inputJson[filterKey]) {
+        searchReferencesFor(inputJson[filterKey][element], inputJson, localizationOfReferences);
     }
-
+    removeUnnecessaryElements(inputJson, filterKey, pathRegex);
     let whiteList = {};
-    for (const key in inputJson[includePath]) {
-        if (!pathRegex.test(key)) {
-            delete inputJson[includePath][key];
-        }
-    }
-    for (const element in inputJson[includePath]) {
-        searchReferencesFor(inputJson[includePath][element], inputJson, whiteList);
+    for (const element in inputJson[filterKey]) {
+        searchReferencesFor(inputJson[filterKey][element], inputJson, whiteList);
     }
 
-    for (let key in localizationOfReferences) {
-        if (!whiteList.hasOwnProperty(key)) {
-            inputJson[key] = {};
+    clearMismatchedElements(inputJson, localizationOfReferences, whiteList);
+    filterJson(inputJson, whiteList);
+}
+
+function getProgram() {
+    let program = require('commander');
+    program.option('-i, --include-paths <include-paths>', 'Get only this paths')
+        .parse(process.argv);
+    return program;
+}
+
+function createPathRegex(str) {
+    return new RegExp(str);
+}
+
+function removeUnnecessaryElements(inputJson, filterKey, regexObj) {
+    for (const key in inputJson[filterKey]) {
+        if (!regexObj.test(key)) {
+            delete inputJson[filterKey][key];
         }
     }
-    filterJson(inputJson, whiteList);
 }
 
 function isObject(value) {
@@ -71,7 +77,14 @@ function searchReferencesFor(element, inputJson, localizationOfReferences) {
             if (modifyLocalizationOfReferences(majorKey, furtherKey, localizationOfReferences) && isObject(next)) {
                 searchReferencesFor(next, inputJson, localizationOfReferences);
             }
-        } else {
+        }
+    }
+}
+
+function clearMismatchedElements(obj, someList, whiteList) {
+    for (let key in someList) {
+        if (!whiteList.hasOwnProperty(key)) {
+            obj[key] = {};
         }
     }
 }
