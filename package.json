@@ -2,11 +2,14 @@
   "name": "swagger-json-filter",
   "version": "0.0.1",
   "description": "Node.js command-line tool for filtering swagger documentation (swagger.json)",
-  "main": "index.js",
+  "main": "src/index.js",
+  "bin": "bin/swagger-json-filter",
   "directories": {
     "test": "test"
   },
   "dependencies": {
+    "commander": "^2.9.0",
+    "flat": "^2.0.1"
   },
   "devDependencies": {
     "json-diff": "^0.3.1"

@@ -1,0 +1,20 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Uber API",
+    "description": "Move your app forward with the Uber API",
+    "version": "1.0.0"
+  },
+  "host": "api.uber.com",
+  "schemes": [
+    "https"
+  ],
+  "basePath": "/v1",
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+  },
+  "definitions": {
+  }
+}

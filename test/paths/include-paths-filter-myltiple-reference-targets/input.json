@@ -13,8 +13,29 @@
   "produces": [
     "application/json"
   ],
+  "parameters": {
+    "user-id": {
+      "name": "user-id",
+      "in": "path",
+      "description": "The user identifier number",
+      "type": "number",
+      "required": true
+    },
+    "tag-name": {
+      "name": "tag-name",
+      "in": "path",
+      "description": "Tag name",
+      "type": "string",
+      "required": true
+    }
+  },
   "paths": {
     "/products": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/user-id"
+        }
+      ],
       "get": {
         "summary": "Product Types",
         "description": "The Products endpoint returns information about the *Uber* products\noffered at a given location. The response includes the display name\nand other details about each product, and lists the products in the\nproper display order.\n",
@@ -261,6 +282,12 @@
         "image": {
           "type": "string",
           "description": "Image URL representing the product."
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Activities"
+          }
         }
       }
     },

@@ -14,50 +14,6 @@
     "application/json"
   ],
   "paths": {
-    "/products": {
-      "get": {
-        "summary": "Product Types",
-        "description": "The Products endpoint returns information about the *Uber* products\noffered at a given location. The response includes the display name\nand other details about each product, and lists the products in the\nproper display order.\n",
-        "parameters": [
-          {
-            "name": "latitude",
-            "in": "query",
-            "description": "Latitude component of location.",
-            "required": true,
-            "type": "number",
-            "format": "double"
-          },
-          {
-            "name": "longitude",
-            "in": "query",
-            "description": "Longitude component of location.",
-            "required": true,
-            "type": "number",
-            "format": "double"
-          }
-        ],
-        "tags": [
-          "Products"
-        ],
-        "responses": {
-          "200": {
-            "description": "An array of products",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Product"
-              }
-            }
-          },
-          "default": {
-            "description": "Unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
     "/estimates/price": {
       "get": {
         "summary": "Price Estimates",
@@ -157,6 +113,21 @@
           "Estimates"
         ],
         "responses": {
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Time Estimates",
+        "description": "Set the Time Estimates endpoint.",
+        "tags": [
+          "Estimates"
+        ],
+        "responses": {
           "200": {
             "description": "An array of products",
             "schema": {
@@ -173,59 +144,21 @@
             }
           }
         }
-      }
-    },
-    "/me": {
-      "get": {
-        "summary": "User Profile",
-        "description": "The User Profile endpoint returns information about the Uber user that has authorized with the application.",
+      },
+      "delete": {
+        "summary": "Time Estimates",
+        "description": "Remove the Time Estimates endpoint.",
         "tags": [
-          "User"
+          "Estimates"
         ],
         "responses": {
           "200": {
-            "description": "Profile information for a user",
+            "description": "An array of products",
             "schema": {
-              "$ref": "#/definitions/Profile"
-            }
-          },
-          "default": {
-            "description": "Unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
-    "/history": {
-      "get": {
-        "summary": "User Activity",
-        "description": "The User Activity endpoint returns data about a user's lifetime activity with Uber. The response will include pickup locations and times, dropoff locations and times, the distance of past requests, and information about which products were requested.<br><br>The history array in the response will have a maximum length based on the limit parameter. The response value count may exceed limit, therefore subsequent API requests may be necessary.",
-        "parameters": [
-          {
-            "name": "offset",
-            "in": "query",
-            "type": "integer",
-            "format": "int32",
-            "description": "Offset the list of returned results by this amount. Default is zero."
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "type": "integer",
-            "format": "int32",
-            "description": "Number of items to retrieve. Default is 5, maximum is 100."
-          }
-        ],
-        "tags": [
-          "User"
-        ],
-        "responses": {
-          "200": {
-            "description": "History information for the given user",
-            "schema": {
-              "$ref": "#/definitions/Activities"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
+              }
             }
           },
           "default": {
@@ -294,66 +227,6 @@
         "surge_multiplier": {
           "type": "number",
           "description": "Expected surge multiplier. Surge is active if surge_multiplier is greater than 1. Price estimate already factors in the surge multiplier."
-        }
-      }
-    },
-    "Profile": {
-      "type": "object",
-      "properties": {
-        "first_name": {
-          "type": "string",
-          "description": "First name of the Uber user."
-        },
-        "last_name": {
-          "type": "string",
-          "description": "Last name of the Uber user."
-        },
-        "email": {
-          "type": "string",
-          "description": "Email address of the Uber user"
-        },
-        "picture": {
-          "type": "string",
-          "description": "Image URL of the Uber user."
-        },
-        "promo_code": {
-          "type": "string",
-          "description": "Promo code of the Uber user."
-        }
-      }
-    },
-    "Activity": {
-      "type": "object",
-      "properties": {
-        "uuid": {
-          "type": "string",
-          "description": "Unique identifier for the activity"
-        }
-      }
-    },
-    "Activities": {
-      "type": "object",
-      "properties": {
-        "offset": {
-          "type": "integer",
-          "format": "int32",
-          "description": "Position in pagination."
-        },
-        "limit": {
-          "type": "integer",
-          "format": "int32",
-          "description": "Number of items to retrieve (100 max)."
-        },
-        "count": {
-          "type": "integer",
-          "format": "int32",
-          "description": "Total number of items available."
-        },
-        "history": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Activity"
-          }
         }
       }
     },
