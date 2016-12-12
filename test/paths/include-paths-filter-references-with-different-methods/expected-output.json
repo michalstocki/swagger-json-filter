@@ -113,15 +113,6 @@
           "Estimates"
         ],
         "responses": {
-          "200": {
-            "description": "An array of products",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Product"
-              }
-            }
-          },
           "default": {
             "description": "Unexpected error",
             "schema": {

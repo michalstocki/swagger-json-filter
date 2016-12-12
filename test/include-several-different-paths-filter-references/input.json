@@ -157,45 +157,6 @@
           "Estimates"
         ],
         "responses": {
-          "default": {
-            "description": "Unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Time Estimates",
-        "description": "Set the Time Estimates endpoint.",
-        "tags": [
-          "Estimates"
-        ],
-        "responses": {
-          "200": {
-            "description": "An array of products",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Product"
-              }
-            }
-          },
-          "default": {
-            "description": "Unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Time Estimates",
-        "description": "Remove the Time Estimates endpoint.",
-        "tags": [
-          "Estimates"
-        ],
-        "responses": {
           "200": {
             "description": "An array of products",
             "schema": {
