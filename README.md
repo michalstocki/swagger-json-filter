@@ -2,15 +2,19 @@
 
 [![Build Status](https://travis-ci.org/michalstocki/swagger-json-filter.svg?branch=master)](https://travis-ci.org/michalstocki/swagger-json-filter)
 
-Command-line tool for filtering documentation created with Swagger.
+Command-line tool for filtering documentation created with [Swagger](http://swagger.io/).
 
 The filter matches all paths defined in the input JSON against the given regular expression. Definition of all paths that don't match given regex, are removed. In the second step tool filters all data structure definitions and removes all that are not used within the remaining part of the paths.
 
 ## Usage
 
 ### as node.js package
-We can use the swagger-json-filter from a js code, givng the input JSON string and options of filtering:
+Install package for your project
+```shell
+npm install swagger-json-filter --save
 ```
+then you can use the swagger-json-filter from a js code, providing the input JSON string and options of filtering:
+```javascript
 const swaggerJsonFilter = require('swagger-json-filter');
 const output = swaggerJsonFilter(inputJsonString, {
     includePaths: "^\/estimates\/.*"
@@ -19,17 +23,17 @@ const output = swaggerJsonFilter(inputJsonString, {
 
 ### as command line tool
 Install package globally
-```
+```shell
 npm install -g swagger-json-filter
 ```
 
 then you can provide contents of the above JSON file to the stdin:
-```
+```shell
 cat input.json | swagger-json-filter --include-paths="^\/estimates\/.*" > output.json
 ```
 
 input.json:
-```
+```json
 {
   "swagger": "2.0",
   "info": {"version": "0.0.0", "title": "Simple API"},
@@ -73,7 +77,7 @@ input.json:
 ```
 
 and we recive following output.json
-```
+```json
 {
   "swagger": "2.0",
   "info": {"version": "0.0.0", "title": "Simple API"},
