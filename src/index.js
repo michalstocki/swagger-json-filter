@@ -40,18 +40,17 @@ function shouldSaveReference(defLocalizationName, defName, definitionsMap) {
     return !definitionsMap[defLocalizationName] || definitionsMap[defLocalizationName].indexOf(defName) < 0;
 }
 
-function searchReferencesFor(element, inputJson, definitionsMap) {
-    const flattenElement = flatten(element);
-    for (const key in flattenElement) {
-        let value = flattenElement[key];
+function searchReferencesFor(definition, inputJson, definitionsMap) {
+    const flattenDefinition = flatten(definition);
+    for (const key in flattenDefinition) {
+        let value = flattenDefinition[key];
         if (key.includes('$ref')) {
             const [defLocalizationName, defName] = value.slice(2).split('/');
-            const next = inputJson[defLocalizationName][defName];
+            const nestedDefinition = inputJson[defLocalizationName][defName];
             if (shouldSaveReference(defLocalizationName, defName, definitionsMap)) {
                 saveReference(defLocalizationName, defName, definitionsMap);
-                if (isObject(next)) {
-                    searchReferencesFor(next, inputJson, definitionsMap);
-
+                if (isObject(nestedDefinition)) {
+                    searchReferencesFor(nestedDefinition, inputJson, definitionsMap);
                 }
             }
         }
