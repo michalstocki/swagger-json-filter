@@ -8,14 +8,97 @@ The filter matches all paths defined in the input JSON against the given regular
 
 ## Usage
 
+### as node.js package
+We can use the swagger-json-filter from a js code, givng the input JSON string and options of filtering:
+```
+const swaggerJsonFilter = require('swagger-json-filter');
+const output = swaggerJsonFilter(inputJsonString, {
+    includePaths: "^\/estimates\/.*"
+});
+```
+
+### as command line tool
 Install package globally
 ```
 npm install -g swagger-json-filter
 ```
 
-then you can provide contents of the JSON file to the stdin:
+then you can provide contents of the above JSON file to the stdin:
 ```
-cat swagger.json | swagger-json-filter --include-paths="\/api\/.*" > filtered-swagger.json
+cat input.json | swagger-json-filter --include-paths="^\/estimates\/.*" > output.json
+```
+
+input.json:
+```
+{
+  "swagger": "2.0",
+  "info": {"version": "0.0.0", "title": "Simple API"},
+  "paths": {
+    "/estimates/price": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "An array of price estimates by product",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PriceEstimate"
+              }}}}}},
+    "/me": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }}}}}
+   },
+  "definitions": {
+    "PriceEstimate": {
+      "type": "object",
+      "properties": {
+        "product_id": {
+          "type": "string",
+          "description": "Unique identifier"
+        }}},
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        }}}
+  }
+}
+```
+
+and we recive following output.json
+```
+{
+  "swagger": "2.0",
+  "info": {"version": "0.0.0", "title": "Simple API"},
+  "paths": {
+    "/estimates/price": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "An array of price estimates by product",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PriceEstimate"
+              }}}}}}
+   },
+  "definitions": {
+    "PriceEstimate": {
+      "type": "object",
+      "properties": {
+        "product_id": {
+          "type": "string",
+          "description": "Unique identifier"
+        }}}
+  }
+}
 ```
 
 ## Acknowledgements ##
