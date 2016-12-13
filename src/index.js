@@ -2,19 +2,25 @@ const flatten = require('flat');
 
 module.exports = function (inputJson, options) {
     const pathRegex = new RegExp(options.includePaths);
+    const definitionRegex = new RegExp(options.includeDefinitions);
     inputJson = JSON.parse(inputJson);
-    const paths = inputJson.paths;
 
     let definitionsMap = {};
-    for (const path in paths) {
-        searchReferencesFor(paths[path], inputJson, definitionsMap);
+    for (const defLocalizationName in inputJson) {
+        if (isObject(inputJson[defLocalizationName])) {
+            searchReferencesFor(inputJson[defLocalizationName], inputJson, definitionsMap);
+        }
     }
+
+    const paths = inputJson.paths;
     removeUnwantedKeys(paths, pathRegex);
     let whiteList = {};
+    if (options.includeDefinitions) {
+        saveDefinitions(definitionRegex, definitionsMap, whiteList, inputJson);
+    }
     for (const path in paths) {
         searchReferencesFor(paths[path], inputJson, whiteList);
     }
-
     clearMismatchedElements(inputJson, definitionsMap, whiteList);
     return filterJson(inputJson, whiteList);
 };
@@ -23,6 +29,20 @@ function removeUnwantedKeys(objectToFilter, keyRegex) {
     for (const key in objectToFilter) {
         if (!keyRegex.test(key)) {
             delete objectToFilter[key];
+        }
+    }
+}
+
+function saveDefinitions(definitionRegex, definitionsMap, whiteList, inputJson) {
+    for (const defLocalizationName in definitionsMap) {
+        for (const defName in inputJson[defLocalizationName]) {
+            const nestedDefinition = inputJson[defLocalizationName][defName];
+            if (definitionRegex.test(defName) && shouldSaveReference(defLocalizationName, defName, whiteList)) {
+                saveReference(defLocalizationName, defName, whiteList);
+                if (isObject(nestedDefinition)) {
+                    searchReferencesFor(nestedDefinition, inputJson, whiteList);
+                }
+            }
         }
     }
 }
