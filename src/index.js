@@ -1,9 +1,9 @@
 const flatten = require('flat');
 
-module.exports = function (inputJson, options) {
+var filterSwagger = function (inputJsonStr, options) {
     const pathRegex = new RegExp(options.includePaths);
     const definitionRegex = new RegExp(options.includeDefinitions);
-    inputJson = JSON.parse(inputJson);
+    inputJson = JSON.parse(inputJsonStr);
 
     let definitionsMap = {};
     for (const defLocalizationName in inputJson) {
@@ -24,6 +24,33 @@ module.exports = function (inputJson, options) {
     clearMismatchedElements(inputJson, definitionsMap, whiteList);
     return filterJson(inputJson, whiteList);
 };
+
+var removeDefinition = function(inputJsonStr, options)
+{
+    var inputJson = JSON.parse(inputJsonStr);
+    var definitionName = options.definitionName;
+    if(definitionName in inputJson.definitions)
+    {
+        delete inputJson.definitions[definitionName];
+    }
+    return JSON.stringify(inputJson);
+}
+
+var removeDefinitionProperty = function(inputJsonStr, options)
+{
+    var inputJson = JSON.parse(inputJsonStr);
+    var definitionName = options.definitionName;
+    var propertyName = options.propertyName;
+
+    if(definitionName in inputJson.definitions)
+    {
+        if(propertyName in inputJson.definitions[definitionName].properties)
+        {
+            delete inputJson.definitions[definitionName].properties[propertyName];
+        }
+    }
+    return JSON.stringify(inputJson);
+}
 
 function removeUnwantedKeys(objectToFilter, keyRegex) {
     for (const key in objectToFilter) {
@@ -97,3 +124,8 @@ function filterJson(inputJson, definitionsMap) {
     return JSON.stringify(inputJson);
 }
 
+module.exports = {
+    filterSwagger,
+    removeDefinition,    
+    removeDefinitionProperty
+}
