@@ -7,7 +7,7 @@
     "swagger-json-filter": "bin/swagger-json-filter",
     "swagger-json-remove-definition": "bin/swagger-json-remove-definition",
     "swagger-json-remove-path": "bin/swagger-json-remove-path",
-    "swagger-json-remove-definition": "bin/swagger-json-remove-definition"
+    "swagger-json-remove-property": "bin/swagger-json-remove-property"
   },
   "directories": {
     "test": "test"
