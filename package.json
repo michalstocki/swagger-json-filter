@@ -3,7 +3,12 @@
   "version": "0.0.1",
   "description": "Node.js command-line tool for filtering swagger documentation (swagger.json)",
   "main": "src/index.js",
-  "bin": "bin/swagger-json-filter",
+  "bin": {
+    "swagger-json-filter": "bin/swagger-json-filter",
+    "swagger-json-remove-definition": "bin/swagger-json-remove-definition",
+    "swagger-json-remove-path": "bin/swagger-json-remove-path",
+    "swagger-json-remove-definition": "bin/swagger-json-remove-definition"
+  },
   "directories": {
     "test": "test"
   },
