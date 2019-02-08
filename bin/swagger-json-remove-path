@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+const swaggerUtil = require('../src/index');
+
+const stdin = process.openStdin();
+let inputJson = '';
+stdin.on('data', function (chunk) {
+    inputJson += chunk;
+});
+
+stdin.on('end', function () {
+    const output = swaggerUtil.removePath(inputJson, getProgram());
+    console.log(output);
+});
+
+function getProgram() {
+    let program = require('commander');
+    program.option('-p, --path-name <path-name>', 'Name of path to remove.')
+        .parse(process.argv);
+    return program;
+}

@@ -25,14 +25,40 @@ var filterSwagger = function (inputJsonStr, options) {
     return filterJson(inputJson, whiteList);
 };
 
+var removePath = function(inputJsonStr, options)
+{
+    var inputJson = JSON.parse(inputJsonStr);
+    const pathRegex = new RegExp(options.pathName);
+
+    var pathNames = Object.keys(inputJson.paths);
+
+    for (var i = 0; i < pathNames.length; i++)
+    {
+        var pathName= pathNames[i];
+        if(pathRegex.test(pathName))
+        {
+            delete inputJson.paths[pathName];
+        }
+    }
+
+    return JSON.stringify(inputJson);
+}
+
 var removeDefinition = function(inputJsonStr, options)
 {
     var inputJson = JSON.parse(inputJsonStr);
-    var definitionName = options.definitionName;
-    if(definitionName in inputJson.definitions)
+    var definitionRegex = new RegExp(options.definitionName);
+    var definitionNames = Object.keys(inputJson.definitions);
+
+    for (var i = 0; i < definitionNames.length; i++)
     {
-        delete inputJson.definitions[definitionName];
+        var definitionName = definitionNames[i];
+        if(definitionRegex.test(definitionName))
+        {
+            delete inputJson.definitions[definitionName];
+        }
     }
+
     return JSON.stringify(inputJson);
 }
 
@@ -127,5 +153,6 @@ function filterJson(inputJson, definitionsMap) {
 module.exports = {
     filterSwagger,
     removeDefinition,    
-    removeDefinitionProperty
+    removeDefinitionProperty,
+    removePath
 }
