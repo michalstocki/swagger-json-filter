@@ -1,0 +1,52 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Filter",
+            "program": "${workspaceFolder}/bin/swagger-json-filter-vsCode-Test",
+            "args": [ 
+                "filter",
+                "--include-paths",
+                "\"^(\/api\/members\/{memberGuid}\/cmrs\/.*|\/api\/members\/{memberGuid}\/careplans\/({carePlanId}\/problems|{goalID}\/intervention|{problemID}\/goalscareplans).*|\/api\/members\/{memberGuid}\/(medications|allergies|profile\/address|profile\/phone|profile\/email)|\/api\/members\/{memberGuid}\/careproviders.*)$\""
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Remove Definition",
+            "program": "${workspaceFolder}/bin/swagger-json-filter-vsCode-Test",
+            "args": [ 
+                "remove-definition",
+                "--definition-name",
+                "System.ValueTuple`2[[System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Remove Model Property",
+            "program": "${workspaceFolder}/bin/swagger-json-filter-vsCode-Test",
+            "args": [ 
+                "remove-definition-property",
+                "--definition-name",
+                "AssureCare.MedCompass.Web.Models.Members.Cmr.CmrCommunicationsModel",
+                "--property-name",
+                "RenderedMemberDocuments"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Help",
+            "program": "${workspaceFolder}/bin/swagger-json-filter-vsCode-Test",
+            "args": [ 
+                "--help"
+            ]
+        }
+    ]
+}

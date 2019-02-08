@@ -8,14 +8,13 @@ stdin.on('data', function (chunk) {
 });
 
 stdin.on('end', function () {
-    const output = swaggerUtil.filterSwagger(inputJson, getProgram());
+    const output = swaggerUtil.removeDefinition(inputJson, getProgram());
     console.log(output);
 });
 
 function getProgram() {
     let program = require('commander');
-    program.option('-p, --include-paths <include-paths>', 'Keep only paths matching the given JavaScript regex')
-        .option('-d, --include-definitions <include-definitions>', 'Keep only definitions matching the given JavaScript regex')
+    program.option('-d, --definition-name <definition-name>', 'Name of definition to remove.')
         .parse(process.argv);
     return program;
 }
